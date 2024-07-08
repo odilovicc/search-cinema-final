@@ -1,19 +1,13 @@
-# final-kinopoisk-vue
+# Search Cinema Final
 
-## Project setup
-```
-npm install
-```
+Финальная версия Search Cinema
+Vue Composition API using TypeScript
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Использованные модули
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- Vuex
+- vue-router
+- tailwindcss
+- Primevue
+- Primeicons
+- Swiper slider vue
