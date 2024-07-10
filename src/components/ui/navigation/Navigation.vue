@@ -1,9 +1,20 @@
 <template>
   <menubar :model="links">
     <template #start>
-      <h1 class="text-xl font-bold">
+      <router-link to="/" class="text-xl font-bold">
         Search<span class="text-[--p-primary-color]">Cinema</span>
-      </h1>
+      </router-link>
+    </template>
+    <template #item="{ item, props }">
+      <router-link
+        v-slot="{ href, navigate }"
+        :to="item.to"
+        custom
+      >
+        <a :href="href" v-bind="props.action" @click="navigate">
+          <span class="">{{ item.label }}</span>
+        </a>
+      </router-link>
     </template>
     <template #end>
       <Button text icon="pi pi-search" @click="$emit('click:search')" />
@@ -16,15 +27,15 @@ import { INavLinks } from "@/types";
 const links: INavLinks[] = [
   {
     label: "Главная",
-    url: "/",
+    to: "/",
   },
   {
     label: "Фильмы",
-    url: "/films",
+    to: "/films",
   },
   {
     label: "Сериалы",
-    url: "/serials",
+    to: "/serials",
   },
 ];
 </script>
