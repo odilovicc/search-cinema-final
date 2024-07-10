@@ -1,68 +1,64 @@
 <template>
   <div class="container mx-auto py-5">
-    <h1 class="text-2xl font-bold">Фильмы</h1>
-    <div class="my-8 flex items-center gap-5">
-      <Select
-        v-model="selectedCity"
-        :options="cities"
-        optionLabel="name"
-        placeholder="Жанры"
-        class="w-full md:w-56"
-      />
-      <Select
-        v-model="selectedCity"
-        :options="cities"
-        optionLabel="name"
-        placeholder="Рейтинг"
-        class="w-full md:w-56"
-      />
-      <Select
-        v-model="selectedCity"
-        :options="cities"
-        optionLabel="name"
-        placeholder="Годы выхода"
-        class="w-full md:w-56"
-      />
-    </div>
+    <h1 class="text-2xl font-bold mb-8">Фильмы</h1>
 
-    <div class="flex flex-wrap gap-5 w-full" v-memo="[filteredFilms]" ref="filmContainer">
-      <film-card
-        v-for="movie in filteredFilms"
-        :key="movie.id"
-        :movie="movie"
-        class="w-1/6 flex-auto"
-      />
+    <div class="flex flex-wrap gap-5 w-full" ref="filmContainer">
+      <template v-if="loading">
+        <Skeleton
+          v-for="n in 10"
+          :key="n"
+          class="w-1/6 h-[20rem] flex-auto"
+        ></Skeleton>
+      </template>
+      <template v-else>
+        <film-card
+          v-for="movie in filteredFilms"
+          :key="movie.id"
+          :movie="movie"
+          class="w-1/6 flex-auto"
+        />
+      </template>
     </div>
 
     <div class="mt-12">
-      <Paginator :rows="10" :totalRecords="120"></Paginator>
+      <Paginator
+        :rows="10"
+        :totalRecords="response.pages"
+        :first="firstRow"
+        @page="fetchByPage"
+      ></Paginator>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onBeforeMount, onMounted } from "vue";
+import { computed, ref, onBeforeMount, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { useInfiniteScroll } from "@vueuse/core";
-
+import Skeleton from "primevue/skeleton";
 
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
 
-const filmContainer = ref<HTMLElement | null>(null)
-const selectedCity = ref();
+const loading = ref(false);
+const firstRow = ref(0);
 
 const filteredFilms = computed(() => store.getters["cinema/filteredFilms"]);
+const response = computed(() => store.state.cinema.response);
 
-const cities = ref([
-  { name: "New York", code: "NY" },
-  { name: "Rome", code: "RM" },
-  { name: "London", code: "LDN" },
-  { name: "Istanbul", code: "IST" },
-  { name: "Paris", code: "PRS" },
-]);
+const fetchByPage = async (event: { page: number }) => {
+  loading.value = true;
+  await store.dispatch("cinema/getFilmsByPage", event.page + 1);
+  router.push({
+    name: "film-list",
+    query: {
+      page: event.page + 1,
+    },
+  });
+  firstRow.value = event.page * 10;
+  loading.value = false;
+};
 
 onBeforeMount(() => {
   if (!route.query.page) {
@@ -75,9 +71,15 @@ onBeforeMount(() => {
   }
 });
 
-onMounted(() => {
-  console.log(store.state.cinema.response);
-});
+watch(
+  () => route.query.page,
+  (newPage) => {
+    if (newPage) {
+      fetchByPage({ page: Number(newPage) - 1 });
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <!-- 

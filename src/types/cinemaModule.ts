@@ -58,5 +58,5 @@ export interface ICinemaState {
     films: Film[],
     loading: boolean,
     response: Object[],
-    page: number
+    page: number,
 }

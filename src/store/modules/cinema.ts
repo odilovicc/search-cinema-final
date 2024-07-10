@@ -19,15 +19,6 @@ const mutations: MutationTree<ICinemaState> = {
             console.error("Payload is not in expected format:", payload);
         }
     },
-    appendFilms(state, payload) {
-        if (Array.isArray(payload)) {
-            state.films = [...state.films, ...payload];
-        } else if (payload.docs && Array.isArray(payload.docs)) {
-            state.films = [...state.films, ...payload.docs];
-        } else {
-            console.error("Payload is not in expected format:", payload);
-        }
-    },
     setResponse(state, payload) {
         state.response = payload;
     },
@@ -44,12 +35,10 @@ const actions: ActionTree<ICinemaState, {}> = {
         commit('setLoading', true);
         try {
             const filmsResponse = await getFilms({
-                limit: 10,
-                page: state.page,
+                limit: 100,
             }).then((res) => {
-                commit('appendFilms', res);
+                commit('setFilms', res);
                 commit('setResponse', res);
-                console.log(res);
             });
         } catch (error) {
             console.error('Failed to fetch films:', error);
@@ -57,10 +46,18 @@ const actions: ActionTree<ICinemaState, {}> = {
             commit('setLoading', false);
         }
     },
-    async loadMoreFilms({ commit, state }) {
-        commit('setPage', state.page + 1);
-        await this.dispatch('cinema/fetchFilms');
-    },
+    async getFilmsByPage({ commit, state }, payload) {
+        commit('setLoading', true);
+        try {
+            const filmsResponse = await getFilms({
+                limit: 100,
+                page: payload,
+            }).then((res) => {
+                commit('setFilms', res);
+                commit('setResponse', res);
+            });
+        } catch (e) { console.log(e) }
+    }
 };
 
 const getters: GetterTree<ICinemaState, {}> = {

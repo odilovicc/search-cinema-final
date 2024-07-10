@@ -21,6 +21,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'films',
         name: 'film-list',
+        
         component: () => import('@/views/film/list/FilmList.vue')
       }
     ]
