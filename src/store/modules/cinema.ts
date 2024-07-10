@@ -50,7 +50,7 @@ const actions: ActionTree<ICinemaState, {}> = {
         commit('setLoading', true);
         try {
             const filmsResponse = await getFilms({
-                limit: 100,
+                limit: 250,
                 page: payload,
             }).then((res) => {
                 commit('setFilms', res);
@@ -76,6 +76,15 @@ const getters: GetterTree<ICinemaState, {}> = {
                 film.poster.url &&
                 (film.name !== null || film.alternativeName !== null) &&
                 film.rating.imdb > 0
+        );
+    },
+    filteredFilmsByYear: (state) => {
+        return state.films.filter(
+            (film) =>
+                film.poster &&
+                film.poster.url &&
+                (film.name !== null || film.alternativeName !== null) &&
+                film.year > 2022
         );
     },
     isLoading: (state) => state.loading,

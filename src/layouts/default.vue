@@ -7,11 +7,13 @@
       <component :is="Component" />
     </keep-alive>
   </router-view>
+  <Footer v-once/>
 </template>
 <script setup lang="ts">
 import Navigation from "@/components/ui/navigation/Navigation.vue";
 import { onMounted } from "vue";
 import { useStore } from "vuex";
+import Footer from '@/components/Footer.vue'
 
 const store = useStore()
 

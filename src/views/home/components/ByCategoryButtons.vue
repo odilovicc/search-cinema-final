@@ -34,11 +34,6 @@ const categories = ref(<IButtonCategories[]>[
     query: "new",
   },
   {
-    label: "Популярные",
-    icon: "star",
-    query: "popular",
-  },
-  {
     label: "Драмы",
     icon: "theater_comedy",
     query: "drama",
