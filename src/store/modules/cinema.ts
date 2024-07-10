@@ -1,12 +1,14 @@
 import { Module, MutationTree, ActionTree, GetterTree } from 'vuex';
-import { ICinemaState } from '@/types';
-import { getFilms } from '@/services';
+import { Film, ICinemaState } from '@/types';
+import { getFilms, searchFilm } from '@/services';
 
 const state: ICinemaState = {
     films: [],
     response: [],
+    foundFilm: {} as Film,
     loading: false,
     page: 1,
+    errors: [] as string[],
 };
 
 const mutations: MutationTree<ICinemaState> = {
@@ -28,6 +30,9 @@ const mutations: MutationTree<ICinemaState> = {
     setPage(state, page: number) {
         state.page = page;
     },
+    setErrors(state, errors: string[]) {
+        state.errors = errors;
+    },
 };
 
 const actions: ActionTree<ICinemaState, {}> = {
@@ -40,8 +45,9 @@ const actions: ActionTree<ICinemaState, {}> = {
                 commit('setFilms', res);
                 commit('setResponse', res);
             });
-        } catch (error) {
+        } catch (error: Error | any) {
             console.error('Failed to fetch films:', error);
+            commit('setErrors', error.response.data.message);
         } finally {
             commit('setLoading', false);
         }
@@ -56,7 +62,25 @@ const actions: ActionTree<ICinemaState, {}> = {
                 commit('setFilms', res);
                 commit('setResponse', res);
             });
-        } catch (e) { console.log(e) }
+        } catch (error: Error | any) {
+            console.error('Failed to fetch films by page:', error);
+            commit('setErrors', error.response.data.message);
+        } finally {
+            commit('setLoading', false);
+        }
+    },
+    async searchFilms({ commit, state }, payload) {
+        commit('setLoading', true);
+        try {
+            const filmsResponse = await searchFilm(payload).then((res) => {
+                state.foundFilm = res;
+            });
+        } catch (error: Error | any) {
+            console.error('Failed to search films:', error);
+            commit('setErrors', error.response.data.message);
+        } finally {
+            commit('setLoading', false);
+        }
     }
 };
 

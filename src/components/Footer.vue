@@ -1,5 +1,5 @@
 <template>
-    <footer class="p-5">
+    <footer class="py-5 container mx-auto">
         <span>Bakhtiyor's Portfolio &copy;2024</span>    
     </footer>
 </template>

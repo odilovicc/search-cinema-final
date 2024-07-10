@@ -1,5 +1,5 @@
 import instance, { oldInstance } from '@/plugins/axios'
-import { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export const getFilmById = async (id: number) => {
   const response = await instance.get(`/movie/${id}`)
@@ -14,11 +14,26 @@ interface MyAxiosRequestConfig extends AxiosRequestConfig {
 }
 
 export const getFilms = async (params?: Object) => {
-  const req = await instance.get<any, any>('/movie', {
+  const req: AxiosRequestConfig = await instance.get<any, any>('/movie', {
     params: params,
   } as MyAxiosRequestConfig);
-  return req.data;
+  const response: AxiosResponse = req.data
+  if(response.status === 200) {
+    return req.data;
+  } else {
+    return response.status
+  }
 };
+
+export const searchFilm = async (query: string) => {
+  const req = await instance.get<any, any>('/keyword', {
+    params: {
+      title: query
+    }
+  } as MyAxiosRequestConfig);
+
+  return req.data
+}
 
 export const getGenresOld = async (params?: Object) => {
   const req = await oldInstance.get<any, any>('/movie/possible-values-by-field', {

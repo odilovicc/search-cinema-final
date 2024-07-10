@@ -6,23 +6,30 @@
       </router-link>
     </template>
     <template #item="{ item, props }">
-      <router-link
-        v-slot="{ href, navigate }"
-        :to="item.to"
-        custom
-      >
+      <router-link v-slot="{ href, navigate }" :to="item.to" custom>
         <a :href="href" v-bind="props.action" @click="navigate">
           <span class="">{{ item.label }}</span>
         </a>
       </router-link>
     </template>
     <template #end>
-      <Button text icon="pi pi-search" @click="$emit('click:search')" />
+      <Button
+        text
+        icon="pi pi-search"
+        @click="
+          router.push({
+            name: 'search',
+          })
+        "
+      />
     </template>
   </menubar>
 </template>
 <script setup lang="ts">
 import { INavLinks } from "@/types";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const links: INavLinks[] = [
   {

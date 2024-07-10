@@ -59,4 +59,6 @@ export interface ICinemaState {
     loading: boolean,
     response: Object[],
     page: number,
+    foundFilm: Film,
+    errors: Object[] | Array<any>
 }
