@@ -10,4 +10,12 @@
 </template>
 <script setup lang="ts">
 import Navigation from "@/components/ui/navigation/Navigation.vue";
+import { onMounted } from "vue";
+import { useStore } from "vuex";
+
+const store = useStore()
+
+onMounted(() => {
+  store.dispatch('cinema/fetchFilms')
+})
 </script>

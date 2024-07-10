@@ -13,6 +13,10 @@ import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
 import Button from 'primevue/button'
 import Tag from 'primevue/tag'
+import Skeleton from 'primevue/skeleton'
+import FilmCard from './components/ui/FilmCard/FilmCard.vue'
+import Select from 'primevue/select'
+import Paginator from 'primevue/paginator';
 
 import router from './router'
 import store from './store'
@@ -31,4 +35,8 @@ createApp(App)
     .component('Tag', Tag)
     .component('InputGroupAddon', InputGroupAddon)
     .component('Button', Button)
+    .component('Skeleton', Skeleton)
+    .component('FilmCard', FilmCard)
+    .component('Select', Select)
+    .component('Paginator', Paginator)
     .mount('#app')

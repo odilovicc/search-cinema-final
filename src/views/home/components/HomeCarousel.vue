@@ -12,21 +12,11 @@
         :style="{ backgroundImage: `url(${movie.poster.previewUrl})` }"
         class="rounded-xl"
       >
-        <router-link
-          class="absolute top-0 left-0 w-full h-full"
-          :to="{ name: 'film', params: { id: movie.id } }"
-        />
         <div class="px-4 py-2 w-full">
-          <h1 class="text-xl mb-2 font-bold">
-            {{ movie.name || movie.alternativeName }}
-          </h1>
-          <div class="flex items-center gap-2">
-            <tag
-              :severity="movie.rating.imdb > 5 ? 'success' : 'danger'"
-              :value="movie.rating.imdb"
-            />
-            <p class="text-sm">{{ movie.year }}</p>
-          </div>
+          <router-link
+            class="absolute top-0 left-0 w-full h-full"
+            :to="{ name: 'film', params: { id: movie.id } }"
+          />
         </div>
       </swiper-slide>
     </swiper>
