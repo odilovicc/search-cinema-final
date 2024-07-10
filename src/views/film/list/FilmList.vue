@@ -1,7 +1,6 @@
 <template>
   <div class="container mx-auto py-5">
     <h1 class="text-2xl font-bold mb-8">Фильмы</h1>
-
     <div class="flex flex-wrap gap-5 w-full" ref="filmContainer">
       <template v-if="loading">
         <Skeleton
@@ -16,6 +15,7 @@
           :key="movie.id"
           :movie="movie"
           class="w-1/6 flex-auto"
+          v-memo="[filteredFilms, movie]"
         />
       </template>
     </div>
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onBeforeMount, watch } from "vue";
+import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import Skeleton from "primevue/skeleton";
@@ -59,27 +59,6 @@ const fetchByPage = async (event: { page: number }) => {
   firstRow.value = event.page * 10;
   loading.value = false;
 };
-
-onBeforeMount(() => {
-  if (!route.query.page) {
-    router.push({
-      name: "film-list",
-      query: {
-        page: 1,
-      },
-    });
-  }
-});
-
-watch(
-  () => route.query.page,
-  (newPage) => {
-    if (newPage) {
-      fetchByPage({ page: Number(newPage) - 1 });
-    }
-  },
-  { immediate: true }
-);
 </script>
 
 <!-- 
