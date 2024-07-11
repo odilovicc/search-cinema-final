@@ -5,7 +5,7 @@ import { getFilms, searchFilm } from '@/services';
 const state: ICinemaState = {
     films: [],
     response: [],
-    foundFilm: {} as Film,
+    foundFilm: [] as Film[] | String,
     loading: false,
     page: 1,
     errors: [] as string[],
@@ -74,6 +74,27 @@ const actions: ActionTree<ICinemaState, {}> = {
         try {
             const filmsResponse = await searchFilm(payload).then((res) => {
                 state.foundFilm = res;
+                console.log(res)
+                if(res.docs.length <= 0) {
+                    state.foundFilm = "Ничего не найдено"
+                }
+            });
+        } catch (error: Error | any) {
+            console.error('Failed to search films:', error);
+            commit('setErrors', error.response.data.message);
+        } finally {
+            commit('setLoading', false);
+        }
+    },
+    async searchFilmByPage({ commit, state }, payload) {
+        commit('setLoading', true);
+        try {
+            const filmsResponse = await searchFilm(payload).then((res) => {
+                state.foundFilm = res;
+                console.log(res)
+                if(res.docs.length <= 0) {
+                    state.foundFilm = "Ничего не найдено"
+                }
             });
         } catch (error: Error | any) {
             console.error('Failed to search films:', error);

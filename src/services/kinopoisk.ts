@@ -17,18 +17,13 @@ export const getFilms = async (params?: Object) => {
   const req: AxiosRequestConfig = await instance.get<any, any>('/movie', {
     params: params,
   } as MyAxiosRequestConfig);
-  const response: AxiosResponse = req.data
-  if(response.status === 200) {
-    return req.data;
-  } else {
-    return response.status
-  }
+  return req.data
 };
 
 export const searchFilm = async (query: string) => {
-  const req = await instance.get<any, any>('/keyword', {
+  const req = await instance.get<any, any>('/movie/search', {
     params: {
-      title: query
+      query: query,
     }
   } as MyAxiosRequestConfig);
 

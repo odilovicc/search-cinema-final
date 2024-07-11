@@ -23,9 +23,6 @@ import router from "@/router";
 const store = useStore();
 const toast = useToast();
 
-onMounted(() => {
-  store.dispatch("cinema/fetchFilms");
-});
 
 watch(
   () => store.state.cinema.errors,

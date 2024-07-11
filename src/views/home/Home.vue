@@ -13,7 +13,7 @@
   <about-us v-once />
 </template>
 <script setup lang="ts">
-import { computed, defineAsyncComponent } from "vue";
+import { computed, defineAsyncComponent, onMounted } from "vue";
 import { useStore } from "vuex";
 import ByCategoryButtons from "./components/ByCategoryButtons.vue";
 import AboutUs from "@/components/AboutUs.vue";
@@ -35,6 +35,10 @@ const CarouselByFilter = defineAsyncComponent({
   delay: 200,
   loadingComponent: () => `<Skeleton width="full" height="20rem"/>`,
 });
+
+onMounted(() => {
+  store.dispatch("cinema/fetchFilms")
+})
 </script>
 
-<!-- TODO: Add skeleton to carousel -->
+<!-- TODO: Add skeleton to carousel -->, onMounted

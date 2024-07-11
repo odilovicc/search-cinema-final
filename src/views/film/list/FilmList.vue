@@ -15,7 +15,7 @@
           :key="movie.id"
           :movie="movie"
           class="w-1/6 flex-auto"
-          v-memo="[filteredFilms, movie]"
+          v-memo
         />
       </template>
     </div>
